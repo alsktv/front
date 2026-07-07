@@ -93,3 +93,51 @@ function createParticleBurst() {
         animation.onfinish = () => particle.remove();
     }
 }
+
+// 3. Formspree Form Submission Logic
+const inquiryForm = document.getElementById('inquiry-form');
+const formStatus = document.getElementById('form-status');
+const formSubmitBtn = document.getElementById('form-submit-btn');
+const formSubmitBtnText = formSubmitBtn.querySelector('span');
+
+inquiryForm.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    
+    // Set loading state
+    formSubmitBtn.disabled = true;
+    formSubmitBtnText.textContent = '전송 중...';
+    formStatus.className = 'form-status';
+    formStatus.style.display = 'none';
+
+    const formData = new FormData(inquiryForm);
+    
+    try {
+        const response = await fetch(inquiryForm.action, {
+            method: 'POST',
+            body: formData,
+            headers: {
+                'Accept': 'application/json'
+            }
+        });
+        
+        if (response.ok) {
+            formStatus.textContent = '제휴 문의가 성공적으로 전송되었습니다! 🚀';
+            formStatus.className = 'form-status success';
+            inquiryForm.reset();
+        } else {
+            const data = await response.json();
+            if (data.errors && data.errors.length > 0) {
+                formStatus.textContent = data.errors.map(error => error.message).join(", ");
+            } else {
+                formStatus.textContent = '전송에 실패했습니다. 다시 시도해 주세요.';
+            }
+            formStatus.className = 'form-status error';
+        }
+    } catch (error) {
+        formStatus.textContent = '네트워크 오류가 발생했습니다. 인터넷 연결을 확인해 주세요.';
+        formStatus.className = 'form-status error';
+    } finally {
+        formSubmitBtn.disabled = false;
+        formSubmitBtnText.textContent = '문의 보내기';
+    }
+});

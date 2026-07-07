@@ -119,6 +119,36 @@
                     </div>
                 </div>
             </article>
+
+            <!-- Card 4: Partnership Inquiry Form -->
+            <article class="dashboard-card form-card">
+                <div class="card-header">
+                    <h2>제휴 문의</h2>
+                    <span class="badge">Inquiry</span>
+                </div>
+                <form id="inquiry-form" action="https://formspree.io/f/xqevjore" method="POST" class="inquiry-form">
+                    <div class="form-group">
+                        <label for="form-name">이름 / 회사명</label>
+                        <input type="text" id="form-name" name="name" required placeholder="홍길동 (주식회사 옥토)">
+                    </div>
+                    <div class="form-group">
+                        <label for="form-email">이메일 주소</label>
+                        <input type="email" id="form-email" name="email" required placeholder="example@email.com">
+                    </div>
+                    <div class="form-group">
+                        <label for="form-message">문의 내용</label>
+                        <textarea id="form-message" name="message" required placeholder="제휴 문의 내용을 입력해 주세요." rows="4"></textarea>
+                    </div>
+                    <button type="submit" id="form-submit-btn" class="primary-btn submit-btn">
+                        <span>문의 보내기</span>
+                        <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <line x1="5" y1="12" x2="19" y2="12"></line>
+                            <polyline points="12 5 19 12 12 19"></polyline>
+                        </svg>
+                    </button>
+                    <div id="form-status" class="form-status"></div>
+                </form>
+            </article>
         </div>
     </main>
 
