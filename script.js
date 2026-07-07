@@ -159,3 +159,160 @@ const DISQUS_SHORTNAME = 'alsktv'; // Disqus shortname
     s.setAttribute('data-timestamp', +new Date());
     (d.head || d.body).appendChild(s);
 })();
+
+// 5. Teachable Machine AI Image Classifier
+const TM_MODEL_URL = "https://teachablemachine.withgoogle.com/models/V0L6hDWFn/";
+
+let tmModel = null;
+const modelStatus = document.getElementById('model-status');
+const dropzone = document.getElementById('dropzone');
+const imageUpload = document.getElementById('image-upload');
+const dropzoneDefault = document.getElementById('dropzone-default');
+const previewContainer = document.getElementById('preview-container');
+const imagePreview = document.getElementById('image-preview');
+const removeImgBtn = document.getElementById('remove-img-btn');
+const classifierResults = document.getElementById('classifier-results');
+const resultBars = document.getElementById('result-bars');
+
+// Load the Teachable Machine Model
+async function loadTeachableMachineModel() {
+    try {
+        const modelURL = TM_MODEL_URL + "model.json";
+        const metadataURL = TM_MODEL_URL + "metadata.json";
+        
+        // Load the model and metadata
+        tmModel = await tmImage.load(modelURL, metadataURL);
+        
+        modelStatus.textContent = "준비 완료";
+        modelStatus.style.background = 'rgba(16, 185, 129, 0.15)';
+        modelStatus.style.color = 'var(--accent)';
+    } catch (error) {
+        console.error("Model loading failed:", error);
+        modelStatus.textContent = "로드 실패";
+        modelStatus.style.background = 'rgba(239, 68, 68, 0.15)';
+        modelStatus.style.color = '#ef4444';
+    }
+}
+
+// Initialize Model Load
+loadTeachableMachineModel();
+
+// Dropzone Click Trigger
+dropzone.addEventListener('click', (e) => {
+    if (e.target === removeImgBtn || removeImgBtn.contains(e.target)) return;
+    imageUpload.click();
+});
+
+// Drag and Drop Events
+['dragenter', 'dragover'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.add('dragover');
+    }, false);
+});
+
+['dragleave', 'drop'].forEach(eventName => {
+    dropzone.addEventListener(eventName, (e) => {
+        e.preventDefault();
+        dropzone.classList.remove('dragover');
+    }, false);
+});
+
+dropzone.addEventListener('drop', (e) => {
+    const dt = e.dataTransfer;
+    const files = dt.files;
+    if (files.length > 0) {
+        handleImageFile(files[0]);
+    }
+});
+
+imageUpload.addEventListener('change', (e) => {
+    if (e.target.files.length > 0) {
+        handleImageFile(e.target.files[0]);
+    }
+});
+
+// Remove Image Event
+removeImgBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    resetClassifier();
+});
+
+// Handle File Processing
+function handleImageFile(file) {
+    if (!file.type.startsWith('image/')) {
+        alert('이미지 파일만 업로드할 수 있습니다.');
+        return;
+    }
+    
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+        imagePreview.src = reader.result;
+        dropzoneDefault.style.display = 'none';
+        previewContainer.style.display = 'flex';
+        
+        if (tmModel) {
+            runPrediction();
+        } else {
+            alert('AI 모델이 아직 로드되지 않았습니다. 잠시 후 다시 시도해 주세요.');
+        }
+    };
+}
+
+// Run Teachable Machine Prediction
+async function runPrediction() {
+    classifierResults.style.display = 'block';
+    resultBars.innerHTML = '<p style="text-align: center; color: var(--text-secondary);">AI 분석 중...</p>';
+    
+    await new Promise((resolve) => {
+        if (imagePreview.complete) {
+            resolve();
+        } else {
+            imagePreview.onload = resolve;
+        }
+    });
+
+    try {
+        const predictions = await tmModel.predict(imagePreview);
+        
+        resultBars.innerHTML = '';
+        
+        predictions.forEach(prediction => {
+            const percentage = (prediction.probability * 100).toFixed(1);
+            
+            const resultItem = document.createElement('div');
+            resultItem.className = 'result-item';
+            resultItem.innerHTML = `
+                <div class="result-label">
+                    <span class="class-name">${prediction.className}</span>
+                    <span class="class-percentage">${percentage}%</span>
+                </div>
+                <div class="progress-track">
+                    <div class="progress-bar" style="width: 0%"></div>
+                </div>
+            `;
+            
+            resultBars.appendChild(resultItem);
+            
+            setTimeout(() => {
+                const bar = resultItem.querySelector('.progress-bar');
+                bar.style.width = `${percentage}%`;
+            }, 50);
+        });
+        
+    } catch (error) {
+        console.error("Prediction failed:", error);
+        resultBars.innerHTML = '<p style="text-align: center; color: #ef4444;">분석 실패: 모델 에러</p>';
+    }
+}
+
+// Reset Classifier
+function resetClassifier() {
+    imageUpload.value = '';
+    imagePreview.src = '';
+    previewContainer.style.display = 'none';
+    dropzoneDefault.style.display = 'flex';
+    classifierResults.style.display = 'none';
+    resultBars.innerHTML = '';
+}

@@ -10,6 +10,9 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
+    <!-- TensorFlow.js and Teachable Machine Image -->
+    <script src="https://cdn.jsdelivr.net/npm/@tensorflow/tfjs@3.18.0/dist/tf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@teachablemachine/image@0.8.3/dist/teachablemachine-image.min.js"></script>
 </head>
 <body>
     <div class="glass-bg"></div>
@@ -150,7 +153,41 @@
                 </form>
             </article>
 
-            <!-- Card 5: Disqus Comments -->
+            <!-- Card 5: AI Image Classifier -->
+            <article class="dashboard-card classifier-card">
+                <div class="card-header">
+                    <h2>SDVX / CPO AI 판별기</h2>
+                    <span class="badge status-badge" id="model-status">모델 로딩 중...</span>
+                </div>
+                <div class="classifier-content">
+                    <p class="classifier-desc">SDVX 또는 CPO 사진을 업로드하면 AI가 분석하여 분류합니다.</p>
+                    
+                    <div class="dropzone" id="dropzone">
+                        <input type="file" id="image-upload" accept="image/*" style="display: none;">
+                        <div class="dropzone-default" id="dropzone-default">
+                            <svg class="upload-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                                <polyline points="17 8 12 3 7 8"></polyline>
+                                <line x1="12" y1="3" x2="12" y2="15"></line>
+                            </svg>
+                            <p>클릭하거나 이미지를 여기로 드래그하세요</p>
+                        </div>
+                        <div class="preview-container" id="preview-container" style="display: none;">
+                            <img id="image-preview" src="" alt="미리보기 이미지">
+                            <button type="button" class="remove-btn" id="remove-img-btn" aria-label="이미지 삭제">&times;</button>
+                        </div>
+                    </div>
+
+                    <div class="classifier-results" id="classifier-results" style="display: none;">
+                        <h3>분석 결과</h3>
+                        <div class="result-bars" id="result-bars">
+                            <!-- Dynamic Content -->
+                        </div>
+                    </div>
+                </div>
+            </article>
+
+            <!-- Card 6: Disqus Comments -->
             <article class="dashboard-card comments-card">
                 <div class="card-header">
                     <h2>댓글 피드백</h2>
