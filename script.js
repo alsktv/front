@@ -143,7 +143,7 @@ inquiryForm.addEventListener('submit', async (event) => {
 });
 
 // 4. Disqus Comments Loader
-const DISQUS_SHORTNAME = 'alsktv-front'; // Disqus shortname
+const DISQUS_SHORTNAME = 'alsktv'; // Disqus shortname
 
 (function() {
     if (!document.getElementById('disqus_thread')) return;
