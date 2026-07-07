@@ -141,3 +141,21 @@ inquiryForm.addEventListener('submit', async (event) => {
         formSubmitBtnText.textContent = '문의 보내기';
     }
 });
+
+// 4. Disqus Comments Loader
+const DISQUS_SHORTNAME = 'alsktv-front'; // Disqus shortname
+
+(function() {
+    if (!document.getElementById('disqus_thread')) return;
+    
+    window.disqus_config = function () {
+        this.page.url = window.location.href;
+        this.page.identifier = window.location.pathname || '/';
+    };
+    
+    const d = document;
+    const s = d.createElement('script');
+    s.src = `https://${DISQUS_SHORTNAME}.disqus.com/embed.js`;
+    s.setAttribute('data-timestamp', +new Date());
+    (d.head || d.body).appendChild(s);
+})();
