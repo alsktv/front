@@ -1,13 +1,130 @@
 <!DOCTYPE html>
-<html lang="ko">
+<html lang="ko" data-theme="light">
 <head>
     <meta charset="UTF-8">
-    <title>나의 첫 프론트엔드</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="고급스러운 다크모드/라이트모드 지원 프론트엔드 대시보드">
+    <title>Antigravity Modern Dashboard</title>
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <h1>안녕하세요! VS Code로 만든 웹페이지입니다.</h1>
-    <button id="btn">클릭해보세요</button>
+    <div class="glass-bg"></div>
+    <div class="glass-bg-2"></div>
+
+    <header class="app-header">
+        <div class="logo">
+            <svg class="logo-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 7L12 12L22 7L12 2Z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                <path d="M2 17L12 22L22 17" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M2 12L12 17L22 12" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            </svg>
+            <span>Antigravity Portal</span>
+        </div>
+        <nav class="nav-links">
+            <a href="#" class="active">대시보드</a>
+            <a href="#">프로필</a>
+            <a href="#">설정</a>
+        </nav>
+        <button id="theme-toggle" class="theme-toggle-btn" aria-label="테마 전환">
+            <span class="toggle-icon-wrapper">
+                <!-- Sun Icon -->
+                <svg class="sun-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="12" cy="12" r="5"></circle>
+                    <line x1="12" y1="1" x2="12" y2="3"></line>
+                    <line x1="12" y1="21" x2="12" y2="23"></line>
+                    <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                    <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                    <line x1="1" y1="12" x2="3" y2="12"></line>
+                    <line x1="21" y1="12" x2="23" y2="12"></line>
+                    <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                    <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+                </svg>
+                <!-- Moon Icon -->
+                <svg class="moon-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+                </svg>
+            </span>
+        </button>
+    </header>
+
+    <main class="dashboard-container">
+        <section class="welcome-hero">
+            <h1 class="gradient-text">현대적인 웹 공간에 오신 것을 환영합니다</h1>
+            <p class="subtitle">유려한 애니메이션과 고급스러운 글래스모피즘 디자인이 가미된 반응형 대시보드입니다.</p>
+        </section>
+
+        <div class="grid-layout">
+            <!-- Card 1: Interactive Status -->
+            <article class="dashboard-card status-card">
+                <div class="card-header">
+                    <h2>상태 요약</h2>
+                    <span class="badge pulse">실시간</span>
+                </div>
+                <div class="stat-value" id="click-counter">0</div>
+                <p class="stat-label">상호작용 횟수</p>
+                <button id="btn" class="primary-btn">
+                    <span>클릭하여 상호작용</span>
+                    <svg class="btn-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <line x1="5" y1="12" x2="19" y2="12"></line>
+                        <polyline points="12 5 19 12 12 19"></polyline>
+                    </svg>
+                </button>
+            </article>
+
+            <!-- Card 2: User Profile -->
+            <article class="dashboard-card profile-card">
+                <div class="profile-header">
+                    <div class="avatar">
+                        <span>AG</span>
+                    </div>
+                    <div class="profile-info">
+                        <h3>Antigravity User</h3>
+                        <p>웹 애플리케이션 개발자</p>
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <ul class="profile-details">
+                    <li>
+                        <span class="detail-label">현재 테마</span>
+                        <span class="detail-value" id="theme-status">라이트 모드</span>
+                    </li>
+                    <li>
+                        <span class="detail-label">배포 환경</span>
+                        <span class="detail-value">GitHub Pages</span>
+                    </li>
+                </ul>
+            </article>
+
+            <!-- Card 3: System Status -->
+            <article class="dashboard-card info-card">
+                <h2>핵심 기능</h2>
+                <div class="features-list">
+                    <div class="feature-item">
+                        <div class="feature-icon">🌗</div>
+                        <div>
+                            <h4>테마 지속성</h4>
+                            <p>선택한 테마 모드가 로컬 스토리지에 자동 저장됩니다.</p>
+                        </div>
+                    </div>
+                    <div class="feature-item">
+                        <div class="feature-icon">✨</div>
+                        <div>
+                            <h4>글래스모피즘</h4>
+                            <p>부드러운 블러와 반투명 테두리가 적용된 고품격 레이아웃.</p>
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </div>
+    </main>
+
+    <footer class="app-footer">
+        <p>&copy; 2026 Antigravity Portal. All rights reserved.</p>
+    </footer>
 
     <script src="script.js"></script>
 </body>
